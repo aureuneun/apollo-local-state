@@ -1,8 +1,9 @@
 import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
-import { CounterState } from "./counter/types";
 import counter from "./counter";
+import { ToDos } from "./todos/types";
+import todos from "./todos";
 
 const cache = new InMemoryCache();
 
@@ -12,11 +13,14 @@ const client = new ApolloClient({
   link,
   cache,
   resolvers: {
-    Mutation: { ...counter },
+    Mutation: { ...counter, ...todos },
   },
 });
 
-const initialState: CounterState = { count: 0 };
+const initialState: { count: number; toDos: ToDos[] } = {
+  count: 0,
+  toDos: [],
+};
 
 cache.writeData({ data: initialState });
 
